@@ -1,4 +1,5 @@
-export function getGlobal(): Record<string, any> {
+// Shim for globalThis
+export function getGlobal(): WindowOrWorkerGlobalScope {
     // Web Worker
     if (typeof self !== "undefined") {
         return self;

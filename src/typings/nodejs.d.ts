@@ -1,9 +1,8 @@
 declare namespace NodeJS {
     interface Global {
-        fetch: any
-        // Environment dependent
-        navigator: any;
-        self: any;
-        window: any;
+        fetch: any;
+        Headers: any;
+        Request: any;
+        Response: any;
     }
 }

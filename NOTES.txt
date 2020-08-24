@@ -1,0 +1,32 @@
+// ky
+https://github.com/sindresorhus/ky
+https://github.com/sindresorhus/ky/blob/master/index.js
+
+// ky-universal
+https://github.com/sindresorhus/ky-universal
+https://github.com/sindresorhus/ky-universal/blob/master/index.js
+
+// node-fetch
+https://github.com/node-fetch/node-fetch/tree/3.x
+
+// cross-fetch
+https://github.com/lquixada/cross-fetch
+
+// whatwg-fetch
+https://github.com/github/fetch
+
+// Minimal fetch polyfill 500 bytes (unfetch)
+https://github.com/developit/unfetch
+
+// httpbin.org
+https://httpbin.org/
+
+// Typescript - add typed variables to global
+https://stackoverflow.com/a/43300412
+
+// Promise polyfill
+https://github.com/taylorhakes/promise-polyfill
+https://unpkg.com/promise-polyfill@8.1.3/dist/polyfill.min.js
+
+// Environment detection
+https://www.npmjs.com/package/browser-or-node

@@ -1,8 +1,5 @@
-import nodeFetch from "node-fetch";
-import {fetch as whatwgFetch} from "whatwg-fetch";
-
 declare global {
-    const fetch: nodeFetch | whatwgFetch;
+    const fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>;
     // Environment dependent
     const navigator: any;
     const self: any;

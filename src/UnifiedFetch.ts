@@ -1,22 +1,31 @@
 import {InstanceOptions} from "./interfaces/InstanceOptions";
-import {UnifiedResponse} from "./interfaces/UnifiedResponse";
-import {getGlobal} from "./utilities/get-global";
+import {ResponsePromise} from "./interfaces/ResponsePromise";
+import {RequestOptions} from "./interfaces/RequestOptions";
 
 export class UnifiedFetch {
     private instanceOptions?: InstanceOptions;
-    private global: WindowOrWorkerGlobalScope;
 
     constructor(instanceOptions?: InstanceOptions) {
         if (instanceOptions) {
             this.instanceOptions = instanceOptions;
         }
-
-        this.global = getGlobal();
     }
 
-    fetch(input: RequestInfo, init?: RequestInit): UnifiedResponse {
-        const responsePromise = global.fetch(input, init);
-        (responsePromise as UnifiedResponse).json = async () => (await responsePromise).json();
-        return responsePromise as UnifiedResponse;
+    fetch(request: RequestInfo, options?: RequestOptions): ResponsePromise {
+        if (this.instanceOptions?.beforeRequestHook) {
+             this.instanceOptions.beforeRequestHook(request, options);
+        }
+
+        const responsePromise = fetch(request, options)
+            .then(response => {
+                if (this.instanceOptions?.afterResponseHook) {
+                    return this.instanceOptions.afterResponseHook(response.clone(), request, options);
+                }
+
+                return response;
+            });
+
+        (responsePromise as ResponsePromise).json = async () => (await responsePromise).json();
+        return responsePromise as ResponsePromise;
     }
 }

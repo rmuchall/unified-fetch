@@ -1,6 +1,6 @@
 {
   "name": "unified-fetch",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "unified-fetch",
   "main": "./esm/node.js",
   "browser": "./esm/browser.js",

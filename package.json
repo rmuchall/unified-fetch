@@ -1,0 +1,48 @@
+{
+  "name": "unified-fetch",
+  "version": "0.0.0",
+  "description": "unified-fetch",
+  "main": "./esm/node.js",
+  "browser": "./esm/browser.js",
+  "types": "./types/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "clean": "rimraf ./build",
+    "lint": "eslint --config ./.eslintrc.js --ext .ts ./src ./test",
+    "test": "jest --coverage",
+    "build": "npm run clean && npm run build:esm",
+    "build:esm": "tsc --project tsconfig.release.json --module es2015 --target es5 --outDir build/esm",
+    "copy": "cpy ./package.json ./README.md ./LICENSE.md ./build",
+    "postversion": "git push && git push --tags",
+    "release": "npm run lint && npm run test && npm run build && npm version patch && npm run copy && npm publish ./build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmuchall/unified-fetch.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rmuchall/unified-fetch/issues"
+  },
+  "homepage": "https://github.com/rmuchall/unified-fetch#readme",
+  "devDependencies": {
+    "@types/jest": "26.0.10",
+    "@types/node": "14.6.0",
+    "@types/whatwg-fetch": "0.0.33",
+    "@typescript-eslint/eslint-plugin": "3.9.1",
+    "@typescript-eslint/parser": "3.9.1",
+    "cpy-cli": "3.1.1",
+    "eslint": "7.7.0",
+    "jest": "26.4.2",
+    "rimraf": "3.0.2",
+    "ts-jest": "26.2.0",
+    "ts-node": "9.0.0",
+    "typescript": "4.0.2"
+  },
+  "dependencies": {
+    "node-fetch": "3.0.0-beta.8",
+    "whatwg-fetch": "3.4.0"
+  }
+}

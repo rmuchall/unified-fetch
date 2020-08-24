@@ -14,8 +14,7 @@ test("basic", async () => {
             return Promise.resolve(response);
         }
     });
-    const response = await uniFetch.fetch("https://httpbin.org/post", {method: "POST", body: "a=1"});
-    console.log((response as any).rsm);
-    console.log(await response.json());
+    const result = await uniFetch.fetch("https://httpbin.org/post", {method: "POST", body: "a=1"}).json();
+    console.log(result);
     expect(true).toBeTruthy();
 });

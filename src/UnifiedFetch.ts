@@ -16,7 +16,7 @@ export class UnifiedFetch {
              this.instanceOptions.beforeRequestHook(request, options);
         }
 
-        const responsePromise = fetch(request, options)
+        const fetchResponsePromise = fetch(request, options)
             .then(response => {
                 if (this.instanceOptions?.afterResponseHook) {
                     return this.instanceOptions.afterResponseHook(response.clone(), request, options);
@@ -25,7 +25,14 @@ export class UnifiedFetch {
                 return response;
             });
 
-        (responsePromise as ResponsePromise).json = async () => (await responsePromise).json();
-        return responsePromise as ResponsePromise;
+        return {
+            ...fetchResponsePromise,
+            // Add extension methods
+            arrayBuffer: async () => (await fetchResponsePromise).arrayBuffer(),
+            blob: async () => (await fetchResponsePromise).blob(),
+            formData: async () => (await fetchResponsePromise).formData(),
+            json: async () => (await fetchResponsePromise).json(),
+            text: async () => (await fetchResponsePromise).text()
+        };
     }
 }

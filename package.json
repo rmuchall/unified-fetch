@@ -2,8 +2,8 @@
   "name": "unified-fetch",
   "version": "0.0.5",
   "description": "unified-fetch",
-  "main": "./esm/nodejs.js",
-  "browser": "./esm/browser.js",
+  "main": "./cjs/node.js",
+  "browser": "./cjs/browser.js",
   "types": "./types/types.d.ts",
   "sideEffects": false,
   "scripts": {
@@ -23,7 +23,7 @@
     "url": "git+https://github.com/rmuchall/unified-fetch.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Rob Muchall <rmuchall@protonmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/rmuchall/unified-fetch/issues"

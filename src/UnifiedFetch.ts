@@ -54,6 +54,26 @@ export class UnifiedFetch {
         return result;
     }
 
+    executeBeforeRequestHook(requestInfo: RequestInfo, requestInit: RequestInit): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            if (this.instanceOptions?.beforeRequestHook) {
+                resolve(this.instanceOptions.beforeRequestHook(requestInfo, requestInit));
+            }
+
+            resolve();
+        });
+    }
+
+    executeAfterResponseHook(response: Response, requestInfo: RequestInfo, requestInit: RequestInit): Promise<Response> {
+        return new Promise<Response>((resolve, reject) => {
+            if (this.instanceOptions?.afterResponseHook) {
+                resolve(this.instanceOptions.afterResponseHook(response, requestInfo, requestInit));
+            }
+
+            resolve(response);
+        });
+    }
+
     fetch(input: RequestInfo, init?: RequestOptions): ResponsePromise {
         const requestInit = this.buildRequestInit(init);
 
@@ -65,20 +85,9 @@ export class UnifiedFetch {
             }
         }
 
-        // beforeRequestHook
-        if (this.instanceOptions?.beforeRequestHook) {
-            this.instanceOptions.beforeRequestHook(input, requestInit);
-        }
-
-        const responsePromise = fetch(input, requestInit)
-            .then(response => {
-                // afterRequestHook
-                if (this.instanceOptions?.afterResponseHook) {
-                    return this.instanceOptions.afterResponseHook(response.clone(), input, requestInit);
-                }
-
-                return response;
-            });
+        const responsePromise = this.executeBeforeRequestHook(input, requestInit)
+            .then(() => fetch(input, requestInit))
+            .then((response) => this.executeAfterResponseHook(response, input, requestInit));
 
         // Add extension methods
         (responsePromise as ResponsePromise).arrayBuffer = async () => (await responsePromise).arrayBuffer();
@@ -86,7 +95,7 @@ export class UnifiedFetch {
         (responsePromise as ResponsePromise).formData = async () => (await responsePromise).formData(); // Not implemented in node-fetch
         (responsePromise as ResponsePromise).json = async () => (await responsePromise).json();
         (responsePromise as ResponsePromise).text = async () => (await responsePromise).text();
-        return responsePromise as ResponsePromise;
+        return (responsePromise as ResponsePromise);
     }
 
     // Add shortcuts

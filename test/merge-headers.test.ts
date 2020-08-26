@@ -1,4 +1,4 @@
-import {UnifiedFetch} from "../src/nodejs";
+import {UnifiedFetch} from "../src/node";
 
 const unifiedFetch = new UnifiedFetch();
 

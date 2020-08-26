@@ -1,4 +1,4 @@
-import {UnifiedFetch} from "../src/nodejs";
+import {UnifiedFetch} from "../src/node";
 import {IsValid, MetaValidator} from "meta-validator";
 import express from "express";
 import http, {Server as HttpServer} from "http";

@@ -13,7 +13,7 @@ export class UnifiedFetch {
         }
     }
 
-    buildRequestInit(userRequestOptions?: RequestOptions): RequestInit {
+    private buildRequestInit(userRequestOptions?: RequestOptions): RequestInit {
         // Exclude UnifiedFetch specific options and extract headers
         const {json, headers, ...userRequestOptionsDestructured} = {...userRequestOptions};
         const requestInit: RequestInit = {...userRequestOptionsDestructured};
@@ -22,7 +22,7 @@ export class UnifiedFetch {
         requestInit.method = requestInit.method?.toUpperCase();
 
         // Merge headers
-        requestInit.headers = this.mergeHeaders(this.instanceOptions?.headers, headers);
+        requestInit.headers = UnifiedFetch.mergeHeaders(this.instanceOptions?.headers, headers);
 
         // UnifiedFetch json option
         if (json) {
@@ -31,27 +31,6 @@ export class UnifiedFetch {
         }
 
         return requestInit;
-    }
-
-    mergeHeaders(...sources: HeadersInitOrUndefined[]): Headers {
-        const result = new Headers();
-
-        for (const source of sources) {
-            if (!source) {
-                continue;
-            }
-
-            const headers = source.constructor === Headers ? source : new Headers(source);
-            headers.forEach((value, key, parent) => {
-                if (!value) {
-                    result.delete(key);
-                } else {
-                    result.set(key, value);
-                }
-            });
-        }
-
-        return result;
     }
 
     executeBeforeRequestHook(requestInfo: RequestInfo, requestInit: RequestInit): Promise<void> {
@@ -125,5 +104,26 @@ export class UnifiedFetch {
             ...options,
             method: "DELETE"
         });
+    }
+
+    static mergeHeaders(...sources: HeadersInitOrUndefined[]): Headers {
+        const result = new Headers();
+
+        for (const source of sources) {
+            if (!source) {
+                continue;
+            }
+
+            const headers = source.constructor === Headers ? source : new Headers(source);
+            headers.forEach((value, key, parent) => {
+                if (!value) {
+                    result.delete(key);
+                } else {
+                    result.set(key, value);
+                }
+            });
+        }
+
+        return result;
     }
 }

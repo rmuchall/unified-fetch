@@ -97,7 +97,7 @@ test("headers", async () => {
     expect(result).toEqual("this-header-was-set-in-options");
 });
 
-test("beforeRequestHook", async () => {
+test("sync beforeRequestHook", async () => {
     const unifiedFetch: UnifiedFetch = new UnifiedFetch({
         beforeRequestHook: (requestInfo, requestInit) => {
             if (requestInit.headers) {
@@ -118,9 +118,44 @@ test("beforeRequestHook", async () => {
     expect(result).toEqual("this-header-was-set-in-before-request-hook");
 });
 
-test("afterResponseHook", async () => {
+test("sync afterResponseHook", async () => {
     const unifiedFetch: UnifiedFetch = new UnifiedFetch({
         afterResponseHook: (response, requestInfo, requestInit) => {
+            (response as any).testAfterResponseHook = "this-was-set-in-after-response-hook";
+            return response;
+        }
+    });
+
+    expect.assertions(4);
+    const response = await unifiedFetch.fetch("http://localhost:4500/instance-options/after-response-hook", {method: HttpMethod.GET});
+    expect(response.status).toEqual(HttpStatus.OK);
+    expect(response.headers.get("content-type")).toEqual("application/json; charset=utf-8");
+    expect((response as any).testAfterResponseHook).toBe("this-was-set-in-after-response-hook");
+    const result = await response.json();
+    expect(result).toEqual(testWidget);
+});
+
+test("async beforeRequestHook", async () => {
+    const unifiedFetch: UnifiedFetch = new UnifiedFetch({
+        beforeRequestHook: async (requestInfo, requestInit) => {
+            requestInit.headers = UnifiedFetch.mergeHeaders(requestInit.headers, {
+                "Request-Hook-Header": "this-header-was-set-in-before-request-hook"
+            });
+            return Promise.resolve();
+        }
+    });
+
+    expect.assertions(3);
+    const response = await unifiedFetch.fetch("http://localhost:4500/instance-options/before-request-hook", {method: HttpMethod.GET});
+    expect(response.status).toEqual(HttpStatus.OK);
+    expect(response.headers.get("content-type")).toEqual("text/html; charset=utf-8");
+    const result = await response.text();
+    expect(result).toEqual("this-header-was-set-in-before-request-hook");
+});
+
+test("afterResponseHook", async () => {
+    const unifiedFetch: UnifiedFetch = new UnifiedFetch({
+        afterResponseHook: async (response, requestInfo, requestInit) => {
             (response as any).testAfterResponseHook = "this-was-set-in-after-response-hook";
             return Promise.resolve(response);
         }

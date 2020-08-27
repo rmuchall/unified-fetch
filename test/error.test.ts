@@ -56,14 +56,11 @@ beforeAll((done) => {
 afterAll((done) => apiServer.close(done));
 
 test("bad path", async () => {
-    // expect.assertions(3);
+    expect.assertions(3);
     const unifiedFetch: UnifiedFetch = new UnifiedFetch();
     const response = await unifiedFetch.get("http://localhost:4500/error/bad-path");
     expect(response.status).toEqual(HttpStatus.NOT_FOUND);
-    /*
-    // TODO: Re-enable after json 404 handler added to meta-controller
     expect(response.headers.get("content-type")).toEqual("application/json; charset=utf-8");
     const result = await response.json();
-    expect(result).toEqual(testWidget);
-    */
+    expect(result.message).toEqual("Route not found");
 });

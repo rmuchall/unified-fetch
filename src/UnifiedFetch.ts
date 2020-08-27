@@ -1,7 +1,6 @@
 import {InstanceOptions} from "./interfaces/InstanceOptions";
 import {ResponsePromise} from "./interfaces/ResponsePromise";
 import {RequestOptions} from "./interfaces/RequestOptions";
-import {stripDuplicateSlashes} from "./utilities/string-utils";
 import {HeadersInitOrUndefined} from "./utilities/type-aliases";
 
 export class UnifiedFetch {
@@ -58,9 +57,9 @@ export class UnifiedFetch {
 
         // prefixUrl?
         if (this.instanceOptions?.prefixUrl) {
-            const requestUrl = stripDuplicateSlashes(`${this.instanceOptions.prefixUrl}${input}`);
             if (typeof input === "string") {
-                input = requestUrl;
+                // Normalize url
+                input = `${this.instanceOptions.prefixUrl}/${input}`.replace(/([^:]\/)\/+/g, "$1");
             }
         }
 

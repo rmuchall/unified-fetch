@@ -32,7 +32,7 @@ let apiServer: HttpServer;
 beforeAll((done) => {
     MetaController.clearMetadata();
 
-    @JsonController("/basic-test")
+    @JsonController("/basic")
     class WidgetController {
 
         @Route(HttpMethod.GET)
@@ -74,7 +74,7 @@ afterAll((done) => apiServer.close(done));
 
 test("get by option", async () => {
     expect.assertions(3);
-    const response = await unifiedFetch.fetch("http://localhost:4500/basic-test", {method: HttpMethod.GET});
+    const response = await unifiedFetch.fetch("http://localhost:4500/basic", {method: HttpMethod.GET});
     expect(response.status).toEqual(HttpStatus.OK);
     expect(response.headers.get("content-type")).toEqual("application/json; charset=utf-8");
     const result = await response.json();
@@ -83,7 +83,7 @@ test("get by option", async () => {
 
 test("get by method", async () => {
     expect.assertions(3);
-    const response = await unifiedFetch.get("http://localhost:4500/basic-test");
+    const response = await unifiedFetch.get("http://localhost:4500/basic");
     expect(response.status).toEqual(HttpStatus.OK);
     expect(response.headers.get("content-type")).toEqual("application/json; charset=utf-8");
     const result = await response.json();
@@ -92,7 +92,7 @@ test("get by method", async () => {
 
 test("post by option", async () => {
     expect.assertions(5);
-    const response = await unifiedFetch.fetch("http://localhost:4500/basic-test", {
+    const response = await unifiedFetch.fetch("http://localhost:4500/basic", {
         method: HttpMethod.POST,
         body: JSON.stringify(testWidget),
         headers: {"Content-Type": "application/json"}
@@ -105,7 +105,7 @@ test("post by option", async () => {
 
 test("post by method", async () => {
     expect.assertions(5);
-    const response = await unifiedFetch.post("http://localhost:4500/basic-test", {
+    const response = await unifiedFetch.post("http://localhost:4500/basic", {
         body: JSON.stringify(testWidget),
         headers: {"Content-Type": "application/json"}
     });
@@ -117,7 +117,7 @@ test("post by method", async () => {
 
 test("put by option", async () => {
     expect.assertions(3);
-    const response = await unifiedFetch.fetch("http://localhost:4500/basic-test", {method: HttpMethod.PUT});
+    const response = await unifiedFetch.fetch("http://localhost:4500/basic", {method: HttpMethod.PUT});
     expect(response.status).toEqual(HttpStatus.OK);
     expect(response.headers.get("content-type")).toEqual("application/json; charset=utf-8");
     const result = await response.json();
@@ -126,7 +126,7 @@ test("put by option", async () => {
 
 test("put by method", async () => {
     expect.assertions(3);
-    const response = await unifiedFetch.put("http://localhost:4500/basic-test");
+    const response = await unifiedFetch.put("http://localhost:4500/basic");
     expect(response.status).toEqual(HttpStatus.OK);
     expect(response.headers.get("content-type")).toEqual("application/json; charset=utf-8");
     const result = await response.json();
@@ -135,7 +135,7 @@ test("put by method", async () => {
 
 test("delete by option", async () => {
     expect.assertions(3);
-    const response = await unifiedFetch.fetch("http://localhost:4500/basic-test", {method: HttpMethod.DELETE});
+    const response = await unifiedFetch.fetch("http://localhost:4500/basic", {method: HttpMethod.DELETE});
     expect(response.status).toEqual(HttpStatus.OK);
     expect(response.headers.get("content-type")).toEqual("application/json; charset=utf-8");
     const result = await response.json();
@@ -144,7 +144,7 @@ test("delete by option", async () => {
 
 test("delete by method", async () => {
     expect.assertions(3);
-    const response = await unifiedFetch.delete("http://localhost:4500/basic-test");
+    const response = await unifiedFetch.delete("http://localhost:4500/basic");
     expect(response.status).toEqual(HttpStatus.OK);
     expect(response.headers.get("content-type")).toEqual("application/json; charset=utf-8");
     const result = await response.json();

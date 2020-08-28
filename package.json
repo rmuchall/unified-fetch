@@ -40,7 +40,7 @@
     "eslint": "7.7.0",
     "http-status-ts": "0.0.3",
     "jest": "26.4.2",
-    "meta-controller": "0.0.21",
+    "meta-controller": "0.0.22",
     "rimraf": "3.0.2",
     "ts-jest": "26.3.0",
     "ts-node": "9.0.0",

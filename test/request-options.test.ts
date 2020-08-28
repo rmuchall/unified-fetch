@@ -11,7 +11,7 @@ const unifiedFetch: UnifiedFetch = new UnifiedFetch({
             throw new Error(`${response.status} ${response.statusText}`);
         }
 
-        return Promise.resolve(response);
+        return response;
     }
 });
 

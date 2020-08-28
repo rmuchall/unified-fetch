@@ -1,5 +1,3 @@
-import {RequestOptions} from "../interfaces/RequestOptions";
-
 // Used by mergeHeaders()
 export type HeadersInitOrUndefined = HeadersInit | undefined;
 

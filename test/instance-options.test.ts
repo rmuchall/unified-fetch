@@ -141,6 +141,7 @@ test("async beforeRequestHook", async () => {
             requestInit.headers = UnifiedFetch.mergeHeaders(requestInit.headers, {
                 "Request-Hook-Header": "this-header-was-set-in-before-request-hook"
             });
+
             return Promise.resolve();
         }
     });
@@ -153,7 +154,7 @@ test("async beforeRequestHook", async () => {
     expect(result).toEqual("this-header-was-set-in-before-request-hook");
 });
 
-test("afterResponseHook", async () => {
+test("async afterResponseHook", async () => {
     const unifiedFetch: UnifiedFetch = new UnifiedFetch({
         afterResponseHook: async (response, requestInfo, requestInit) => {
             (response as any).testAfterResponseHook = "this-was-set-in-after-response-hook";

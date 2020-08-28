@@ -32,24 +32,21 @@ export class UnifiedFetch {
         return requestInit;
     }
 
-    executeBeforeRequestHook(requestInfo: RequestInfo, requestInit: RequestInit): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            if (this.instanceOptions?.beforeRequestHook) {
-                resolve(this.instanceOptions.beforeRequestHook(requestInfo, requestInit));
-            }
+    private async performFetch(requestInfo: RequestInfo, requestInit: RequestInit): Promise<Response> {
+        // beforeRequestHook
+        if (this.instanceOptions?.beforeRequestHook) {
+            await this.instanceOptions.beforeRequestHook(requestInfo, requestInit);
+        }
 
-            resolve();
-        });
-    }
+        // Fetch
+        let response = await fetch(requestInfo, requestInit);
 
-    executeAfterResponseHook(response: Response, requestInfo: RequestInfo, requestInit: RequestInit): Promise<Response> {
-        return new Promise<Response>((resolve, reject) => {
-            if (this.instanceOptions?.afterResponseHook) {
-                resolve(this.instanceOptions.afterResponseHook(response, requestInfo, requestInit));
-            }
+        // afterResponseHook
+        if (this.instanceOptions?.afterResponseHook) {
+            response = await this.instanceOptions.afterResponseHook(response, requestInfo, requestInit);
+        }
 
-            resolve(response);
-        });
+        return response;
     }
 
     fetch(input: RequestInfo, init?: RequestOptions): ResponsePromise {
@@ -63,17 +60,17 @@ export class UnifiedFetch {
             }
         }
 
-        const responsePromise = this.executeBeforeRequestHook(input, requestInit)
-            .then(() => fetch(input, requestInit))
-            .then((response) => this.executeAfterResponseHook(response, input, requestInit));
+        // Fetch
+        const responsePromise = <ResponsePromise>this.performFetch(input, requestInit);
 
         // Add extension methods
-        (responsePromise as ResponsePromise).arrayBuffer = async () => (await responsePromise).arrayBuffer();
-        (responsePromise as ResponsePromise).blob = async () => (await responsePromise).blob();
-        (responsePromise as ResponsePromise).formData = async () => (await responsePromise).formData(); // Not implemented in node-fetch
-        (responsePromise as ResponsePromise).json = async () => (await responsePromise).json();
-        (responsePromise as ResponsePromise).text = async () => (await responsePromise).text();
-        return (responsePromise as ResponsePromise);
+        responsePromise.arrayBuffer = async () => (await responsePromise).arrayBuffer();
+        responsePromise.blob = async () => (await responsePromise).blob();
+        responsePromise.formData = async () => (await responsePromise).formData(); // Not implemented in node-fetch
+        responsePromise.json = async () => (await responsePromise).json();
+        responsePromise.text = async () => (await responsePromise).text();
+
+        return responsePromise
     }
 
     // Add shortcuts

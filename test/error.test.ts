@@ -64,3 +64,52 @@ test("bad path", async () => {
     const result = await response.json();
     expect(result.message).toEqual("Route not found");
 });
+
+test("sync beforeRequestHook", () => {
+    const unifiedFetch: UnifiedFetch = new UnifiedFetch({
+        beforeRequestHook: (requestInfo, requestInit) => {
+            throw new Error("thrown in sync beforeRequestHook");
+        }
+    });
+
+    expect(() => {
+        return unifiedFetch.get("http://localhost:4500/error");
+    }).rejects.toThrow("thrown in sync beforeRequestHook");
+})
+
+test("sync afterResponseHook", () => {
+    const unifiedFetch: UnifiedFetch = new UnifiedFetch({
+        afterResponseHook: (response, requestInfo, requestInit) => {
+            throw new Error("thrown in sync afterResponseHook");
+        }
+    });
+
+    expect(() => {
+        return unifiedFetch.get("http://localhost:4500/error");
+    }).rejects.toThrow("thrown in sync afterResponseHook");
+})
+
+
+test("async beforeRequestHook", () => {
+    const unifiedFetch: UnifiedFetch = new UnifiedFetch({
+        beforeRequestHook: async (requestInfo, requestInit) => {
+            throw new Error("thrown in async beforeRequestHook");
+        }
+    });
+
+    expect(() => {
+        return unifiedFetch.get("http://localhost:4500/error");
+    }).rejects.toThrow("thrown in async beforeRequestHook");
+})
+
+test("async afterResponseHook", () => {
+    const unifiedFetch: UnifiedFetch = new UnifiedFetch({
+        afterResponseHook: async (response, requestInfo, requestInit) => {
+            throw new Error("thrown in async afterResponseHook");
+        }
+    });
+
+    expect(() => {
+        return unifiedFetch.get("http://localhost:4500/error");
+    }).rejects.toThrow("thrown in async afterResponseHook");
+})

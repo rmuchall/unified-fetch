@@ -11,9 +11,9 @@
     "lint": "eslint --config ./.eslintrc.js --ext .ts ./src ./test",
     "test": "jest --coverage",
     "build": "npm run clean && npm rum build:cjs && npm run build:esm && npm run build:es2015",
-    "build:cjs": "tsc --project tsconfig.release.json --module commonjs --target es5 --outDir build/cjs",
-    "build:esm": "tsc --project tsconfig.release.json --module es2015 --target es5 --outDir build/esm",
-    "build:es2015": "tsc --project tsconfig.release.json --module es2015 --target es2015 --outDir build/es2015",
+    "build:cjs": "tsc --project tsconfig-release.json --module commonjs --target es5 --outDir build/cjs",
+    "build:esm": "tsc --project tsconfig-release.json --module es2015 --target es5 --outDir build/esm",
+    "build:es2015": "tsc --project tsconfig-release.json --module es2015 --target es2015 --outDir build/es2015",
     "copy": "cpy ./package.json ./README.md ./LICENSE.md ./build",
     "postversion": "git push && git push --tags",
     "release": "npm run lint && npm run test && npm run build && npm version patch && npm run copy && npm publish ./build"

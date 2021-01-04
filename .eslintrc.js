@@ -14,6 +14,7 @@ module.exports = {
     ],
     rules: {
         "no-control-regex": "off",
+        "require-await": "error",
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-explicit-any": "off",

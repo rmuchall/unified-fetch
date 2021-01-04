@@ -1,5 +1,4 @@
 import {InstanceOptions} from "./interfaces/InstanceOptions";
-import {ResponsePromise} from "./interfaces/ResponsePromise";
 import {RequestOptions} from "./interfaces/RequestOptions";
 import {HeadersInitOrUndefined} from "./utilities/type-aliases";
 
@@ -49,7 +48,7 @@ export class UnifiedFetch {
         return response;
     }
 
-    fetch(input: RequestInfo, init?: RequestOptions): ResponsePromise {
+    fetch(input: RequestInfo, init?: RequestOptions): Promise<Response> {
         const requestInit = this.buildRequestInit(init);
 
         // prefixUrl?
@@ -70,41 +69,32 @@ export class UnifiedFetch {
         }
 
         // Fetch
-        const responsePromise = <ResponsePromise>this.performFetch(input, requestInit);
-
-        // Add extension methods
-        responsePromise.arrayBuffer = async () => (await responsePromise).arrayBuffer();
-        responsePromise.blob = async () => (await responsePromise).blob();
-        responsePromise.formData = async () => (await responsePromise).formData(); // Not implemented in node-fetch
-        responsePromise.json = async () => (await responsePromise).json();
-        responsePromise.text = async () => (await responsePromise).text();
-
-        return responsePromise
+        return this.performFetch(input, requestInit);
     }
 
     // Add shortcuts
-    get(request: RequestInfo, options?: RequestOptions): ResponsePromise {
+    get(request: RequestInfo, options?: RequestOptions): Promise<Response> {
         return this.fetch(request, {
             ...options,
             method: "GET"
         });
     }
 
-    post(request: RequestInfo, options?: RequestOptions): ResponsePromise {
+    post(request: RequestInfo, options?: RequestOptions): Promise<Response> {
         return this.fetch(request, {
             ...options,
             method: "POST"
         });
     }
 
-    put(request: RequestInfo, options?: RequestOptions): ResponsePromise {
+    put(request: RequestInfo, options?: RequestOptions): Promise<Response> {
         return this.fetch(request, {
             ...options,
             method: "PUT"
         });
     }
 
-    delete(request: RequestInfo, options?: RequestOptions): ResponsePromise {
+    delete(request: RequestInfo, options?: RequestOptions): Promise<Response> {
         return this.fetch(request, {
             ...options,
             method: "DELETE"

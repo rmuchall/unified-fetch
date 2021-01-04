@@ -41,7 +41,7 @@ let apiServer: HttpServer;
 beforeAll((done) => {
     MetaController.clearMetadata();
 
-    @JsonController("/extension-methods")
+    @JsonController("/body-methods")
     class WidgetController {
 
         @Route(HttpMethod.GET, "/json")
@@ -87,16 +87,16 @@ afterAll((done) => apiServer.close(done));
 
 test("arrayBuffer()", async () => {
     expect.assertions(1);
-    const result = await unifiedFetch.fetch("http://localhost:4500/extension-methods/buffer",
-        {method: HttpMethod.GET}).arrayBuffer();
+    const response = await unifiedFetch.fetch("http://localhost:4500/body-methods/buffer", {method: HttpMethod.GET});
+    const result = await response.arrayBuffer();
     const decoder = new TextDecoder();
     expect(JSON.parse(decoder.decode(result))).toEqual(testWidget);
 });
 
 test("blob()", async () => {
     expect.assertions(1);
-    const result = await unifiedFetch.fetch("http://localhost:4500/extension-methods/buffer",
-        {method: HttpMethod.GET}).blob();
+    const response = await unifiedFetch.fetch("http://localhost:4500/body-methods/buffer", {method: HttpMethod.GET});
+    const result = await response.blob();
     const decoder = new TextDecoder();
     expect(JSON.parse(decoder.decode(await result.arrayBuffer()))).toEqual(testWidget);
 });
@@ -106,7 +106,7 @@ test("blob()", async () => {
 // https://github.com/node-fetch/node-fetch/tree/3.x#interface-body
 test("formData()", async () => {
     expect.assertions(1);
-    const result = await unifiedFetch.fetch("http://localhost:4500/extension-methods/form-data",
+    const result = await unifiedFetch.fetch("http://localhost:4500/body-methods/form-data",
         {method: HttpMethod.GET}).formData();
     expect(result.get("widget-name")).toEqual("Doodad");
 });
@@ -114,14 +114,14 @@ test("formData()", async () => {
 
 test("json()", async () => {
     expect.assertions(1);
-    const result = await unifiedFetch.fetch("http://localhost:4500/extension-methods/json",
-        {method: HttpMethod.GET}).json<Widget>();
+    const response = await unifiedFetch.fetch("http://localhost:4500/body-methods/json", {method: HttpMethod.GET});
+    const result = await response.json() as Widget;
     expect(result).toEqual(testWidget);
 });
 
 test("text()", async () => {
     expect.assertions(1);
-    const result = await unifiedFetch.fetch("http://localhost:4500/extension-methods/text",
-        {method: HttpMethod.GET}).text();
+    const response = await unifiedFetch.fetch("http://localhost:4500/body-methods/text", {method: HttpMethod.GET});
+    const result = await response.text();
     expect(result).toEqual("Hello world!");
 });

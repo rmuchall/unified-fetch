@@ -74,10 +74,11 @@ afterAll((done) => apiServer.close(done));
 
 test("json", async () => {
     expect.assertions(3);
-    const result = await unifiedFetch.fetch("http://localhost:4500/request-options/json", {
+    const response = await unifiedFetch.fetch("http://localhost:4500/request-options/json", {
         method: "POST",
         json: testWidget
-    }).json<Widget>();
+    });
+    const result = await response.json() as Widget;
     expect(result).toEqual(testWidget);
 });
 

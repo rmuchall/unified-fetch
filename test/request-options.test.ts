@@ -86,7 +86,7 @@ test("queryString", async () => {
     expect.assertions(3);
     const result = await unifiedFetch.fetch("http://localhost:4500/request-options/query-string", {
         method: "POST",
-        queryStringParams: {
+        queryString: {
             singleWord: "myParameter",
             multipleWords: "my parameter"
         }

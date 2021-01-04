@@ -92,7 +92,7 @@ test("sync afterResponseHook", () => {
 
 test("async beforeRequestHook", () => {
     const unifiedFetch: UnifiedFetch = new UnifiedFetch({
-        beforeRequestHook: async (requestInfo, requestInit) => {
+        beforeRequestHook: (requestInfo, requestInit) => {
             throw new Error("thrown in async beforeRequestHook");
         }
     });
@@ -104,7 +104,7 @@ test("async beforeRequestHook", () => {
 
 test("async afterResponseHook", () => {
     const unifiedFetch: UnifiedFetch = new UnifiedFetch({
-        afterResponseHook: async (response, requestInfo, requestInit) => {
+        afterResponseHook: (response, requestInfo, requestInit) => {
             throw new Error("thrown in async afterResponseHook");
         }
     });

@@ -13,7 +13,7 @@ export class UnifiedFetch {
 
     private buildRequestInit(userRequestOptions?: RequestOptions): RequestInit {
         // Exclude UnifiedFetch specific options and extract headers
-        const {json, queryStringParams, headers, ...userRequestOptionsDestructured} = {...userRequestOptions};
+        const {json, queryString, headers, ...userRequestOptionsDestructured} = {...userRequestOptions};
         const requestInit: RequestInit = {...userRequestOptionsDestructured};
 
         // Normalize method case
@@ -60,10 +60,10 @@ export class UnifiedFetch {
         }
 
         // UnifiedFetch queryStringParams option
-        const queryStringParams = init?.queryStringParams;
-        if (queryStringParams) {
-            const queryString = Object.keys(queryStringParams)
-                .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryStringParams[key])}`)
+        const queryStringObject = init?.queryString;
+        if (queryStringObject) {
+            const queryString = Object.keys(queryStringObject)
+                .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryStringObject[key])}`)
                 .join("&");
             input = `${input}?${queryString}`;
         }

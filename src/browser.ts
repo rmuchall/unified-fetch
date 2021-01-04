@@ -1,27 +1,30 @@
 import {fetch as whatwgFetch, Headers as whatwgHeaders, Request as whatwgRequest, Response as whatwgResponse} from "whatwg-fetch";
+import ""
 
 if (!window.fetch) {
     window.fetch =  whatwgFetch;
 }
 
-if (!global.Headers) {
-    global.Headers = whatwgHeaders;
+if (!window.Headers) {
+    window.Headers = whatwgHeaders;
 }
 
-if (!global.Request) {
-    global.Request = whatwgRequest;
+if (!window.Request) {
+    window.Request = whatwgRequest;
 }
 
-if (!global.Response) {
-    global.Response = whatwgResponse;
+if (!window.Response) {
+    window.Response = whatwgResponse;
 }
+
+
 
 /*
-if (!global.AbortController) {
+if (!window.AbortController) {
     // Requires another shim - not included (yet)
 }
 
-if (!global.ReadableStream) {
+if (!window.ReadableStream) {
     // Requires another shim - not included (yet)
 }
 */

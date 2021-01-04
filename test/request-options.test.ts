@@ -2,7 +2,7 @@ import {UnifiedFetch} from "../src/node";
 import {IsValid, MetaValidator} from "meta-validator";
 import express from "express";
 import http, {Server as HttpServer} from "http";
-import {Body, JsonController, MetaController, Route} from "meta-controller";
+import {Body, JsonController, MetaController, QueryParam, Route} from "meta-controller";
 import {HttpMethod} from "http-status-ts";
 
 const unifiedFetch: UnifiedFetch = new UnifiedFetch({
@@ -50,6 +50,12 @@ beforeAll((done) => {
             return widget;
         }
 
+        @Route(HttpMethod.POST, "/query-string")
+        postQueryString(@QueryParam("singleWord") singleWord: string, @QueryParam("multipleWords") multipleWords: string): boolean {
+            expect(singleWord).toEqual("myParameter");
+            expect(multipleWords).toEqual("my parameter");
+            return true;
+        }
     }
 
     expressApp = express();
@@ -73,4 +79,16 @@ test("json", async () => {
         json: testWidget
     }).json<Widget>();
     expect(result).toEqual(testWidget);
+});
+
+test("queryString", async () => {
+    expect.assertions(3);
+    const result = await unifiedFetch.fetch("http://localhost:4500/request-options/query-string", {
+        method: "POST",
+        queryStringParams: {
+            singleWord: "myParameter",
+            multipleWords: "my parameter"
+        }
+    });
+    expect(result).toBeTruthy();
 });

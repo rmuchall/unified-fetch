@@ -14,7 +14,7 @@ export class UnifiedFetch {
 
     private buildRequestInit(userRequestOptions?: RequestOptions): RequestInit {
         // Exclude UnifiedFetch specific options and extract headers
-        const {json, headers, ...userRequestOptionsDestructured} = {...userRequestOptions};
+        const {json, queryStringParams, headers, ...userRequestOptionsDestructured} = {...userRequestOptions};
         const requestInit: RequestInit = {...userRequestOptionsDestructured};
 
         // Normalize method case
@@ -58,6 +58,15 @@ export class UnifiedFetch {
                 // Normalize url
                 input = `${this.instanceOptions.prefixUrl}/${input}`.replace(/([^:]\/)\/+/g, "$1");
             }
+        }
+
+        // UnifiedFetch queryStringParams option
+        const queryStringParams = init?.queryStringParams;
+        if (queryStringParams) {
+            const queryString = Object.keys(queryStringParams)
+                .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryStringParams[key])}`)
+                .join("&");
+            input = `${input}?${queryString}`;
         }
 
         // Fetch

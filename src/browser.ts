@@ -1,8 +1,7 @@
 import {fetch as whatwgFetch, Headers as whatwgHeaders, Request as whatwgRequest, Response as whatwgResponse} from "whatwg-fetch";
-import ""
 
 if (!window.fetch) {
-    window.fetch =  whatwgFetch;
+    window.fetch = whatwgFetch;
 }
 
 if (!window.Headers) {
@@ -16,8 +15,6 @@ if (!window.Request) {
 if (!window.Response) {
     window.Response = whatwgResponse;
 }
-
-
 
 /*
 if (!window.AbortController) {

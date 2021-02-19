@@ -1,6 +1,6 @@
 {
   "name": "unified-fetch",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "unified-fetch",
   "main": "./cjs/node.js",
   "browser": "./cjs/browser.js",

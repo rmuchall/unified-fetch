@@ -22,6 +22,13 @@ export class UnifiedFetch {
         // Merge headers
         requestInit.headers = UnifiedFetch.mergeHeaders(this.instanceOptions?.headers, headers);
 
+        // JWT token
+        if (this.instanceOptions?.jwtToken) {
+            requestInit.headers = UnifiedFetch.mergeHeaders(requestInit.headers, {
+                "Authorization": `Bearer ${this.instanceOptions.jwtToken}`
+            });
+        }
+
         // UnifiedFetch json option
         if (json) {
             requestInit.headers.append("Content-Type", "application/json");

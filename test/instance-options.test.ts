@@ -38,9 +38,9 @@ beforeAll((done) => {
             return testWidget;
         }
 
-        @Route(HttpMethod.GET, "/headers")
-        headers(@HeaderParam("Test-Header") testHeader: string): string {
-            return testHeader;
+        @Route(HttpMethod.GET, "/jwt-token")
+        jwtToken(@HeaderParam("Authorization") authorizationHeader: string): string {
+            return authorizationHeader;
         }
 
         @Route(HttpMethod.GET, "/before-request-hook")
@@ -53,6 +53,19 @@ beforeAll((done) => {
             return testWidget;
         }
 
+        @Route(HttpMethod.GET, "/headers")
+        headers(@HeaderParam("Test-Header") testHeader: string): string {
+            return testHeader;
+        }
+
+        @Route(HttpMethod.GET, "/jwt-token-and-headers")
+        jwtTokenAndHeaders(@HeaderParam("Authorization") authorizationHeader: string,
+            @HeaderParam("Test-Header") testHeader: string): string[] {
+            const headers: string[] = [];
+            headers.push(authorizationHeader);
+            headers.push(testHeader);
+            return headers;
+        }
     }
 
     expressApp = express();
@@ -82,19 +95,17 @@ test("prefixUrl", async () => {
     expect(result).toEqual(testWidget);
 });
 
-test("headers", async () => {
+test("jwtToken", async () => {
     const unifiedFetch: UnifiedFetch = new UnifiedFetch({
-        headers: {
-            "Test-Header": "this-header-was-set-in-options"
-        }
+        jwtToken: "this-is-a-test-jwt-token"
     });
 
     expect.assertions(3);
-    const response = await unifiedFetch.fetch("http://localhost:4500/instance-options/headers", {method: HttpMethod.GET});
+    const response = await unifiedFetch.fetch("http://localhost:4500/instance-options/jwt-token", {method: HttpMethod.GET});
     expect(response.status).toEqual(HttpStatus.OK);
     expect(response.headers.get("content-type")).toEqual("text/html; charset=utf-8");
     const result = await response.text();
-    expect(result).toEqual("this-header-was-set-in-options");
+    expect(result).toEqual("Bearer this-is-a-test-jwt-token");
 });
 
 test("sync beforeRequestHook", async () => {
@@ -169,4 +180,36 @@ test("async afterResponseHook", async () => {
     expect((response as any).testAfterResponseHook).toBe("this-was-set-in-after-response-hook");
     const result = await response.json();
     expect(result).toEqual(testWidget);
+});
+
+test("headers", async () => {
+    const unifiedFetch: UnifiedFetch = new UnifiedFetch({
+        headers: {
+            "Test-Header": "this-header-was-set-in-options"
+        }
+    });
+
+    expect.assertions(3);
+    const response = await unifiedFetch.fetch("http://localhost:4500/instance-options/headers", {method: HttpMethod.GET});
+    expect(response.status).toEqual(HttpStatus.OK);
+    expect(response.headers.get("content-type")).toEqual("text/html; charset=utf-8");
+    const result = await response.text();
+    expect(result).toEqual("this-header-was-set-in-options");
+});
+
+test("jwtToken AND headers", async () => {
+    const unifiedFetch: UnifiedFetch = new UnifiedFetch({
+        jwtToken: "this-is-a-test-jwt-token",
+        headers: {
+            "Test-Header": "this-header-was-set-in-options"
+        }
+    });
+
+    expect.assertions(4);
+    const response = await unifiedFetch.fetch("http://localhost:4500/instance-options/jwt-token-and-headers", {method: HttpMethod.GET});
+    expect(response.status).toEqual(HttpStatus.OK);
+    expect(response.headers.get("content-type")).toEqual("application/json; charset=utf-8");
+    const result = await response.json() as string[];
+    expect(result[0]).toEqual("Bearer this-is-a-test-jwt-token");
+    expect(result[1]).toEqual("this-header-was-set-in-options");
 });

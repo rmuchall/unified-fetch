@@ -1,6 +1,6 @@
 import {UnifiedFetch} from "../src/node";
 import {IsValid, MetaValidator} from "meta-validator";
-import express from "express";
+import express, {Application} from "express";
 import http, {Server as HttpServer} from "http";
 import {Body, JsonController, MetaController, Route} from "meta-controller";
 import {HttpStatus, HttpMethod} from "http-status-ts";
@@ -26,7 +26,7 @@ const testWidget: Widget = Object.assign<Widget, Widget>(new Widget(), {
     isBlue: true
 });
 
-let expressApp: any;
+let expressApp: Application;
 let apiServer: HttpServer;
 
 beforeAll((done) => {

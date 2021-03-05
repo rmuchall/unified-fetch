@@ -1,6 +1,6 @@
 import {UnifiedFetch} from "../src/node";
 import {IsValid, MetaValidator} from "meta-validator";
-import express from "express";
+import express, {Application} from "express";
 import http, {Server as HttpServer} from "http";
 import {JsonController, MetaController, Route} from "meta-controller";
 import {HttpStatus, HttpMethod} from "http-status-ts";
@@ -25,7 +25,7 @@ const testWidget: Widget = Object.assign<Widget, Widget>(new Widget(), {
     isBlue: true
 });
 
-let expressApp: any;
+let expressApp: Application;
 let apiServer: HttpServer;
 
 beforeAll((done) => {
@@ -72,10 +72,10 @@ test("sync beforeRequestHook", () => {
         }
     });
 
-    expect(() => {
+    void expect(() => {
         return unifiedFetch.get("http://localhost:4500/error");
     }).rejects.toThrow("thrown in sync beforeRequestHook");
-})
+});
 
 test("sync afterResponseHook", () => {
     const unifiedFetch: UnifiedFetch = new UnifiedFetch({
@@ -84,10 +84,10 @@ test("sync afterResponseHook", () => {
         }
     });
 
-    expect(() => {
+    void expect(() => {
         return unifiedFetch.get("http://localhost:4500/error");
     }).rejects.toThrow("thrown in sync afterResponseHook");
-})
+});
 
 
 test("async beforeRequestHook", () => {
@@ -97,10 +97,10 @@ test("async beforeRequestHook", () => {
         }
     });
 
-    expect(() => {
+    void expect(() => {
         return unifiedFetch.get("http://localhost:4500/error");
     }).rejects.toThrow("thrown in async beforeRequestHook");
-})
+});
 
 test("async afterResponseHook", () => {
     const unifiedFetch: UnifiedFetch = new UnifiedFetch({
@@ -109,7 +109,7 @@ test("async afterResponseHook", () => {
         }
     });
 
-    expect(() => {
+    void expect(() => {
         return unifiedFetch.get("http://localhost:4500/error");
     }).rejects.toThrow("thrown in async afterResponseHook");
-})
+});

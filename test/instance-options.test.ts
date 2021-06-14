@@ -80,7 +80,10 @@ beforeAll((done) => {
     apiServer.listen(4500, done);
 });
 
-afterAll((done) => apiServer.close(done));
+afterAll(done => {
+    apiServer.close(done);
+    done();
+});
 
 test("prefixUrl", async () => {
     const unifiedFetch: UnifiedFetch = new UnifiedFetch({

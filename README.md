@@ -11,30 +11,30 @@ Install the [unified-fetch package](https://www.npmjs.com/package/unified-fetch)
 
 ## Usage
 Use unified-fetch in the same way you use built-in [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch).
-```
+```typescript
 const response = await unifiedFetch.fetch("http://localhost/basic", {method: HttpMethod.GET});
 const result = await response.json();
 ```
 
 ## Instance Options
 The following instance initialization options are available. <br/>
-```
+```typescript
 const unifiedFetch: UnifiedFetch = new UnifiedFetch({
     // ... instance options
 });
 ```
 
-| Option            | Description                                                                     | 
-|-------------------|---------------------------------------------------------------------------------|
-| prefixUrl         | Prefix all requests with the specified URL                                      |
-| jwtToken          | Include the specified JWT token (using appropriate auth header) to all requests |
-| beforeRequestHook | Hook into the request before it's been made                                     |
-| afterRequestHook  | Hook into the request after it's been made                                      |
-| headers           | Apply additional headers                                                        |
+| Option            | Description                                                     | 
+|-------------------|-----------------------------------------------------------------|
+| prefixUrl         | Prefix all requests with the specified URL                      |
+| jwtToken          | Include the specified JWT token (using appropriate auth header) |
+| beforeRequestHook | Hook into the request before it's been made                     |
+| afterRequestHook  | Hook into the request after it's been made                      |
+| headers           | Apply additional headers                                        |
 
 ## Request Options
 The following request options are available. <br/>
-```
+```typescript
 const result = await unifiedFetch.fetch("http://localhost/my-request", {
     // ... request options
 });

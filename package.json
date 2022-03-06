@@ -3,7 +3,8 @@
   "version": "0.0.25",
   "description": "unified-fetch",
   "main": "./cjs/node.js",
-  "browser": "./cjs/browser.js",
+  "module": "./esm/node.js",
+  "browser": "./esm/browser.js",
   "types": "./types/types.d.ts",
   "sideEffects": false,
   "scripts": {

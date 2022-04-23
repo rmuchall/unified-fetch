@@ -1,8 +1,9 @@
 import {fetch as whatwgFetch, Headers as whatwgHeaders, Request as whatwgRequest, Response as whatwgResponse} from "whatwg-fetch";
+import {isBrowser} from "./utilities/detect-environment";
 
 // Service workers don't have a window.
 // This way it should work for both browsers and service workers.
-if (window) {
+if (isBrowser()) {
     if (!window.fetch) {
         window.fetch = whatwgFetch;
     }

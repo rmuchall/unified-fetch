@@ -1,30 +1,34 @@
 import {fetch as whatwgFetch, Headers as whatwgHeaders, Request as whatwgRequest, Response as whatwgResponse} from "whatwg-fetch";
 
-if (!window.fetch) {
-    window.fetch = whatwgFetch;
-}
+// Service workers don't have a window.
+// This way it should work for both browsers and service workers.
+if (window) {
+    if (!window.fetch) {
+        window.fetch = whatwgFetch;
+    }
 
-if (!window.Headers) {
-    window.Headers = whatwgHeaders;
-}
+    if (!window.Headers) {
+        window.Headers = whatwgHeaders;
+    }
 
-if (!window.Request) {
-    window.Request = whatwgRequest;
-}
+    if (!window.Request) {
+        window.Request = whatwgRequest;
+    }
 
-if (!window.Response) {
-    window.Response = whatwgResponse;
-}
+    if (!window.Response) {
+        window.Response = whatwgResponse;
+    }
 
-/*
-if (!window.AbortController) {
-    // Requires another shim - not included (yet)
-}
+    /*
+    if (!window.AbortController) {
+        // Requires another shim - not included (yet)
+    }
 
-if (!window.ReadableStream) {
-    // Requires another shim - not included (yet)
+    if (!window.ReadableStream) {
+        // Requires another shim - not included (yet)
+    }
+    */
 }
-*/
 
 // core
 export * from "./UnifiedFetch";
